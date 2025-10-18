@@ -8,7 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Presentation\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ErrorHandler\ErrorHandler.csproj" />
+    <ProjectReference Include="..\WebServer\WebServer.csproj" />
   </ItemGroup>
 
 </Project>

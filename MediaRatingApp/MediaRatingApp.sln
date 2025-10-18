@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35828.75 d17.13
+VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer", "WebServer\WebServer.csproj", "{18940162-DC6B-46EA-884F-EFC04F97F6F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErrorHandler", "ErrorHandler\ErrorHandler.csproj", "{1D77BC15-D3D8-45F2-8596-51A9F9FB8059}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaRatingApp", "MediaRatingApp\MediaRatingApp.csproj", "{E231572A-6799-4B3C-B6C3-E8816080224C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBLink", "DBLink\DBLink.csproj", "{7A87299F-FA11-4D03-B525-8569CA337AA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{18940162-DC6B-46EA-884F-EFC04F97F6F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18940162-DC6B-46EA-884F-EFC04F97F6F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18940162-DC6B-46EA-884F-EFC04F97F6F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D77BC15-D3D8-45F2-8596-51A9F9FB8059}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D77BC15-D3D8-45F2-8596-51A9F9FB8059}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D77BC15-D3D8-45F2-8596-51A9F9FB8059}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D77BC15-D3D8-45F2-8596-51A9F9FB8059}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E231572A-6799-4B3C-B6C3-E8816080224C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E231572A-6799-4B3C-B6C3-E8816080224C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E231572A-6799-4B3C-B6C3-E8816080224C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E231572A-6799-4B3C-B6C3-E8816080224C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A87299F-FA11-4D03-B525-8569CA337AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A87299F-FA11-4D03-B525-8569CA337AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A87299F-FA11-4D03-B525-8569CA337AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A87299F-FA11-4D03-B525-8569CA337AA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
