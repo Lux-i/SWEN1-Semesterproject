@@ -28,7 +28,7 @@ namespace WebServer.Routing
             //repeat until only one route remains or no routes remain
             //in the edge case that 2 or more routes remain, choose the first one
 
-            //if a route is found, get its RouteCallback and execute it
+            //if a route is found, return it's RouteCallback
         }
 
         //public RouteStatus Route(HttpMethod method, string path) { }
