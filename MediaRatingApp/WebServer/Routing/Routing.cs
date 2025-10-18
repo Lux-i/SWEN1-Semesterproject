@@ -4,55 +4,111 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
-using WebServer.Routing.Interfaces;
 using WebServer.Routing.Models;
+using WebServer.Models;
+using WebServer.Routing.Interfaces;
 
 namespace WebServer.Routing
 {
+    /// <summary>
+    /// Utility class to setup routes to be passed to the router
+    /// Provides methods for registering routes with optional middleware
+    /// </summary>
     class Routing
     {
-        //utility class to setup routes to be passed to the router
-        private RouteDictCollection routes;
+        private RouteDictCollection _routes;
+        private Router? _router;
 
-        public Routing() { }
-        
+        public Routing()
+        {
+            // init route dictionaries
+            _routes = new RouteDictCollection
+            {
+                GetRoutes = new RouteDict(),
+                PostRoutes = new RouteDict(),
+                PutRoutes = new RouteDict(),
+                DeleteRoutes = new RouteDict(),
+                UpdateRoutes = new RouteDict()
+            };
+        }
+
+        public void SetRouter(Router router)
+        {
+            _router = router;
+        }
+
+        public RouteDictCollection GetRoutes() => _routes;
+
+        // Methods for registering routes
+        #region Route Registration Methods
+        public void Get(string path, RouteCallback callback, params MiddlewareCallback[] middleware)
+        {
+            _routes.GetRoutes[path] = callback;
+            RegisterRouteMiddleware(path, middleware);
+        }
+
         public void Get(IRoute route)
         {
-            routes.GetRoutes.Add(route.Path, route.Callback);
+            _routes.GetRoutes[route.Path] = route.Callback;
+        }
+
+        public void Post(string path, RouteCallback callback, params MiddlewareCallback[] middleware)
+        {
+            _routes.PostRoutes[path] = callback;
+            RegisterRouteMiddleware(path, middleware);
         }
 
         public void Post(IRoute route)
         {
-            routes.PostRoutes.Add(route.Path, route.Callback);
+            _routes.PostRoutes[route.Path] = route.Callback;
+        }
+
+        public void Put(string path, RouteCallback callback, params MiddlewareCallback[] middleware)
+        {
+            _routes.PutRoutes[path] = callback;
+            RegisterRouteMiddleware(path, middleware);
         }
 
         public void Put(IRoute route)
         {
-            routes.PutRoutes.Add(route.Path, route.Callback);
+            _routes.PutRoutes[route.Path] = route.Callback;
+        }
+
+        public void Delete(string path, RouteCallback callback, params MiddlewareCallback[] middleware)
+        {
+            _routes.DeleteRoutes[path] = callback;
+            RegisterRouteMiddleware(path, middleware);
         }
 
         public void Delete(IRoute route)
         {
-            routes.DeleteRoutes.Add(route.Path, route.Callback);
+            _routes.DeleteRoutes[route.Path] = route.Callback;
         }
 
-        public void Update(IRoute route)
+        public void Patch(string path, RouteCallback callback, params MiddlewareCallback[] middleware)
         {
-            routes.UpdateRoutes.Add(route.Path, route.Callback);
-            this.Get(new Route("/test", (HttpRequest req, HttpResponse res) =>
-            {
-                res.Send("Hello World from GET /test");
-                return Task.CompletedTask;
-            }));
+            _routes.UpdateRoutes[path] = callback;
+            RegisterRouteMiddleware(path, middleware);
+        }
 
-            //create a callback function with the signature postCallback of type RouteCallback
-            //then pass this function into this.Post()
-            RouteCallback postCallback = (HttpRequest req, HttpResponse res) =>
+        public void Patch(IRoute route)
+        {
+            _routes.UpdateRoutes[route.Path] = route.Callback;
+        }
+        #endregion
+
+        /// <summary>
+        /// Private helper to register middleware for a route
+        /// </summary>
+        private void RegisterRouteMiddleware(string path, MiddlewareCallback[] middleware)
+        {
+            if (_router != null && middleware.Length > 0)
             {
-                res.Send("Hello World from POST /test");
-                return Task.CompletedTask;
-            };
-            this.Post(new Route("/post-test", postCallback));
+                foreach (var mw in middleware)
+                {
+                    _router.UseForRoute(path, mw);
+                }
+            }
         }
     }
 }

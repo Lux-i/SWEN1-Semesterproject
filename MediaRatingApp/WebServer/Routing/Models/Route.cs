@@ -1,5 +1,5 @@
 using WebServer.Routing.Interfaces;
-using WebServer.Routing.Models;
+using WebServer.Models;
 
 public class Route : IRoute
 {

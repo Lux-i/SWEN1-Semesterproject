@@ -1,4 +1,8 @@
-﻿using System.Net;
+﻿using System;
+using System.Threading.Tasks;
+using WebServer;
+using WebServer.Routing;
+using WebServer.Routing.Models;
 
 namespace MediaRatingApp.WebServer
 {
@@ -6,48 +10,80 @@ namespace MediaRatingApp.WebServer
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            var routing = new Routing();
 
-            HttpListener listener = new HttpListener();
-            listener.Prefixes.Add("http://localhost:80/");
-            listener.Start();
-
-            Console.WriteLine("Listening on http://localhost:80 ...");
-
-            HttpListenerContext context = listener.GetContext();
-
-            HttpListenerRequest request = context.Request;
-
-            foreach (string header in request.Headers)
+            routing.Get("/", async (req, res) =>
+                {
+                    res.SendHtml("<html><body><h1>Welcome to MediaRatingApp</h1></body></html>");
+                    await Task.CompletedTask;
+                });
+            routing.Get("/api/hello", async (req, res) =>
             {
-                Console.WriteLine($"{header}: {request.Headers[header]}");
-            }
-
-            if(!request.HasEntityBody)
+                res.SendJson(new { message = "Hello, World!" });
+                await Task.CompletedTask;
+            });
+            routing.Get("/api/user/:userId", async (req, res) =>
             {
-                using var body = request.InputStream;
-                using var reader = new System.IO.StreamReader(body, request.ContentEncoding);
-                string s = reader.ReadToEnd();
-                Console.WriteLine(s);
-            }
+                // Access path parameters
+                string userId = req.GetPathParam("userId");
+                res.SendJson(new { userId, name = "John Doe" });
+                await Task.CompletedTask;
+            });
+            routing.Get("/api/search", async (req, res) =>
+            {
+                // Access query parameters
+                string query = req.GetQueryParam("q");
+                string page = req.GetQueryParam("page");
+                res.SendJson(new { query, page, results = new[] { "result1", "result2" } });
+                await Task.CompletedTask;
+            });
+            routing.Post("/api/user", async (req, res) =>
+            {
+                string body = req.Body;
 
-            var response = context.Response;
-            response.StatusCode = 200;
-            response.ContentType = "text/html";
-            string responseString = "<html><body>Hello World</body></html>";
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-            response.ContentLength64 = buffer.Length;
-            var output = response.OutputStream;
-            output.Write(buffer, 0, buffer.Length);
-            output.Close();
+                res.Status(201).SendJson(new { success = true, data = body });
+                await Task.CompletedTask;
+            });
+            routing.Put("/api/user/:userId", async (req, res) =>
+            {
+                string userId = req.GetPathParam("userId");
+                string body = req.Body;
+                res.SendJson(new { updated = true, userId });
+                await Task.CompletedTask;
+            });
+            routing.Delete("/api/user/:userId", async (req, res) =>
+            {
+                string userId = req.GetPathParam("userId");
+                res.Status(204).Send();
+                await Task.CompletedTask;
+            });
 
+            routing.Get("/api/chaining", async (req, res) =>
+            {
+                res.Status(200)
+                   .Type("application/json")
+                   .Header("X-Custom-Header", "CustomValue")
+                   .Send("{\"chained\": true}");
+                await Task.CompletedTask;
+            });
 
-            //Listen to HTTP
-            /*
-             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Bind(new IPEndPoint(IPAddress.Any, 80));
-            socket.Listen(10);
-             */
+            var router = new Router(routing.GetRoutes());
+
+            router.CatchAll(async (req, res) =>
+            {
+                res.Status(404).SendJson(new
+                {
+                    error = "Not Found",
+                    path = req.Path,
+                    method = req.Method.Method
+                });
+                await Task.CompletedTask;
+            });
+
+            var server = new Server(["http://localhost:80/"], router);
+
+            Console.WriteLine("Starting server...");
+            server.Start();
         }
     }
 }
