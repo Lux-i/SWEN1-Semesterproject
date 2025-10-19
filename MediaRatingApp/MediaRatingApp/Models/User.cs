@@ -8,15 +8,23 @@ namespace MediaRatingApp.Models
 {
     class User
     {
-        int _Id;
-        string Username;
-        string PasswordHash;
-        string Email;
-        DateTime CreatedAt;
+        public int _Id { get; }
+        public string Username { get; }
+        public string PasswordHash { get; }
+        public string Email { get; }
+        public DateTime CreatedAt { get; }
 
-        List<Media> CreatedMedia => GetCreatedMedia();
-        List<Rating> Ratings => GetUserRatings();
-        List<Media> Favorites => GetFavorites();
+        public List<Media> CreatedMedia => GetCreatedMedia();
+        public List<Rating> Ratings => GetUserRatings();
+        public List<Media> Favorites => GetFavorites();
+
+        public User(string username, string passwordHash, string email)
+        {
+            Username = username;
+            PasswordHash = passwordHash;
+            Email = email;
+            CreatedAt = DateTime.UtcNow;
+        }
 
         private List<Media> GetCreatedMedia()
         {

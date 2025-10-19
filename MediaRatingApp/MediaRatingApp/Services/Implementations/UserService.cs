@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediaRatingApp.Services.Interfaces
+namespace MediaRatingApp.Services.Implementations
 {
-    class RatingService
+    class UserService
     {
     }
 }

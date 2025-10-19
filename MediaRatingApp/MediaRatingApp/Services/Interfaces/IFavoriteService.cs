@@ -7,9 +7,9 @@ using MediaRatingApp.Models;
 
 namespace MediaRatingApp.Services.Interfaces
 {
-    interface IAuthenticationService
+    interface IFavoriteService
     {
-        Task<User> RegisterAsync(string username, string password, string email);
-        Task<User?> LoginAsync(string username, string password);
+        Task<bool> ChangeFavoriteStatusAsync(int mediaId, int userId);
+        Task<List<Media>> GetUserFavoritesAsync(int userId);
     }
 }
