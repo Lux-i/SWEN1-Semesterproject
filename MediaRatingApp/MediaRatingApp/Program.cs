@@ -1,10 +1,13 @@
-﻿namespace MediaRatingApp
+﻿using WebServer;
+using WebServer.Routing;
+
+namespace MediaRatingApp
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Router router = new Router();
         }
     }
 }

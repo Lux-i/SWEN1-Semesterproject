@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace MediaRatingApp.Models
 {
-    class Movie : Media
+    class Favorite
     {
-        int Duration; // Duration in minutes
-        string Director;
-        List<string> Actors;
+        int _Id;
+        int UserId;
+        int MediaId;
+        DateTime CreatedAt;
     }
 }
