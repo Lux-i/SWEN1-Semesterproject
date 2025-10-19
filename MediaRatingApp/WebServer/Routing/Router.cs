@@ -9,7 +9,7 @@ using WebServer.Models;
 
 namespace WebServer.Routing
 {
-    class Router
+    public class Router
     {
         #region Route Dictionaries
         private readonly RouteDict _getRoutes;
