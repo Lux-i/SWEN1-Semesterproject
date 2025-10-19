@@ -19,7 +19,8 @@ namespace WebServer.Models
         // Convenience properties
         #region Convenience Properties
         public HttpMethod Method => new HttpMethod(_innerRequest.HttpMethod);
-        public string Path { get; }
+        public string Path { get; set; }
+        public string OriginalPath { get; } // If original path is needed in nested routing
         public string FullPath => _innerRequest.Url?.PathAndQuery ?? string.Empty;
         public string Protocol => _innerRequest.ProtocolVersion.ToString();
         public string IpAddress => _innerRequest.RemoteEndPoint?.Address.ToString() ?? string.Empty;
@@ -93,6 +94,7 @@ namespace WebServer.Models
             _innerRequest = request ?? throw new ArgumentNullException(nameof(request));
 
             Path = _innerRequest.Url?.AbsolutePath ?? "/";
+            OriginalPath = Path;
 
             PathParameters = new Dictionary<string, string>();
             CustomData = new ExpandoObject();

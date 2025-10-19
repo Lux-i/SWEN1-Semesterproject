@@ -7,17 +7,8 @@ using WebServer.Models;
 
 namespace WebServer.Routing.Models
 {
-    class RouteDict : Dictionary<string, RouteCallback>
+    class RouteDict : Dictionary<string, Route>
     {
 
-    }
-
-    struct RouteDictCollection
-    {
-        public RouteDict GetRoutes;
-        public RouteDict PostRoutes;
-        public RouteDict PutRoutes;
-        public RouteDict DeleteRoutes;
-        public RouteDict UpdateRoutes;
     }
 }

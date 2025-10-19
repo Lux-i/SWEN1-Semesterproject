@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace WebServer.Models
 {
-    // The class RouteCallback is a delegate type for defining a callback function that takes an HttpRequest and HttpResponse as parameters.
+    /// <summary>
+    /// Delegate for Route endpoints
+    /// </summary>
     public delegate Task RouteCallback(HttpRequest request, HttpResponse response);
 }

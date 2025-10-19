@@ -11,4 +11,8 @@
     <ProjectReference Include="..\ErrorHandler\ErrorHandler.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Routing\Interfaces\" />
+  </ItemGroup>
+
 </Project>

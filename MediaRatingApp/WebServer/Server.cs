@@ -10,33 +10,36 @@ namespace WebServer
 {
     class Server
     {
-        private HttpListener listener;
-        private Router router;
+        private HttpListener _listener;
+        private Router _router;
 
         public Server(string[] prefixes, Router router)
         {
-            listener = new HttpListener();
+            _listener = new HttpListener();
             foreach (string prefix in prefixes)
             {
-                listener.Prefixes.Add(prefix);
+                _listener.Prefixes.Add(prefix);
             }
-            this.router = router;
+            _router = router;
         }
 
         public void Start()
         {
-            listener.Start();
-            Console.WriteLine("Server started. Listening on the following prefixes:");
-            foreach (string prefix in listener.Prefixes)
+            _listener.Start();
+            Console.WriteLine("Server started. Listening on:");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            foreach (string prefix in _listener.Prefixes)
             {
-                Console.WriteLine(prefix);
+                Console.WriteLine($"*  {prefix}");
             }
+            Console.ResetColor();
+            Console.WriteLine("");
             while (true)
             {
-                HttpListenerContext context = listener.GetContext();
+                HttpListenerContext context = _listener.GetContext();
                 try
                 {
-                    router.Route(context);
+                    _router.Route(context);
                 }
                 catch (Exception ex)
                 {
@@ -45,6 +48,13 @@ namespace WebServer
                     context.Response.Close();
                 }
             }
+        }
+
+        public void Stop()
+        {
+            _listener.Stop();
+            _listener.Close();
+            Console.WriteLine("Server stopped.");
         }
     }
 }

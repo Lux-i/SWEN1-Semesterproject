@@ -1,14 +1,43 @@
-using WebServer.Routing.Interfaces;
 using WebServer.Models;
 
-public class Route : IRoute
+namespace WebServer.Routing.Models
 {
-    public string Path { get; }
-    public RouteCallback Callback { get; }
-
-    public Route(string path, RouteCallback callback)
+    public class Route
     {
-        Path = path;
-        Callback = callback;
+        public string Path { get; set; }
+        public string Method { get; set; } // Might be removed again from Route scope
+        public List<RequestHandler> Callbacks { get; set; }
+
+        public Route(string method, string path)
+        {
+            Method = method.ToUpperInvariant();
+            Path = path;
+            Callbacks = new List<RequestHandler>();
+        }
+
+        /// <summary>
+        /// Add a callback to the route's callback list.
+        /// Can be used to add middleware to the specific route and to add the endpoint (RouteCallback).
+        /// </summary>
+        public void Use(RequestHandler callback)
+        {
+            Callbacks.Add(callback);
+        }
+
+        /// <summary>
+        /// Add a RouteCallback to the route's callback list.
+        /// </summary>
+        public void Use(RouteCallback routeCallback)
+        {
+            Callbacks.Add(RequestHandlerUtil.WrapToRequestHandler(routeCallback));
+        }
+
+        /// <summary>
+        /// Add a MiddlewareCallback to the route's callback list.
+        /// </summary>
+        public void Use(MiddlewareCallback middlewareCallback)
+        {
+            Callbacks.Add(RequestHandlerUtil.WrapToRequestHandler(middlewareCallback));
+        }
     }
 }

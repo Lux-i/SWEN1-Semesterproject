@@ -11,33 +11,179 @@ namespace WebServer.Routing
 {
     class Router
     {
-        private readonly RouteDictCollection _routes;
-        private RouteCallback? _catchAllCallback;
-        private readonly List<MiddlewareItem> _globalMiddleware;
-        private readonly Dictionary<string, List<MiddlewareCallback>> _routeMiddleware;
+        #region Route Dictionaries
+        private readonly RouteDict _getRoutes;
+        private readonly RouteDict _postRoutes;
+        private readonly RouteDict _putRoutes;
+        private readonly RouteDict _deleteRoutes;
+        private readonly RouteDict _patchRoutes;
+        private readonly RouteDict _updateRoutes;
+        #endregion
+        private readonly List<MiddlewareCallback> _middleware; // Global middleware of this router
+        private Route? _catchAll; // Might be removed - See CatchAll()
 
-        public Router(RouteDictCollection routes)
+        public Router()
         {
-            _routes = routes;
-            _globalMiddleware = new List<MiddlewareItem>();
-            _routeMiddleware = new Dictionary<string, List<MiddlewareCallback>>();
+            #region Initialize Route Dictionaries
+            _getRoutes = new RouteDict();
+            _postRoutes = new RouteDict();
+            _putRoutes = new RouteDict();
+            _deleteRoutes = new RouteDict();
+            _patchRoutes = new RouteDict();
+            _updateRoutes = new RouteDict();
+            #endregion
+
+            _middleware = new List<MiddlewareCallback>();
         }
 
-        // Register Middleware
-        public void Use(MiddlewareCallback middleware, string? pathPrefix = null)
+        /// <summary>
+        /// Register given middleware 'globally' to the router
+        /// </summary>
+        public void Use(MiddlewareCallback middleware)
         {
-            _globalMiddleware.Add(new MiddlewareItem(middleware, pathPrefix));
+            _middleware.Add(middleware);
         }
 
-        // Register Route-Specific Middleware
-        public void UseForRoute(string routePath, MiddlewareCallback middleware)
+        public void Use(string pathPrefix, Router subRouter)
         {
-            if (!_routeMiddleware.ContainsKey(routePath))
+            Use(async (req, res, next) =>
             {
-                _routeMiddleware[routePath] = new List<MiddlewareCallback>();
-            }
-            _routeMiddleware[routePath].Add(middleware);
+                if (req.Path.StartsWith(pathPrefix))
+                {
+                    string originalPath = req.Path;
+                    req.Path = req.Path.Substring(pathPrefix.Length);
+                    if (string.IsNullOrEmpty(req.Path))
+                    {
+                        req.Path = "/";
+                    }
+
+                    await subRouter.Route(req, res);
+
+                    req.Path = originalPath; // Restore original path
+                }
+                else
+                {
+                    // Continue - Not for this sub-router
+                    if (next != null)
+                    {
+                        await next();
+                    }
+                }
+            });
         }
+
+        #region Route Management
+
+        /// <summary>
+        /// Add a predefined Route instance
+        /// </summary>
+        public void AddRoute(Route route)
+        {
+            try
+            {
+                RouteDict routeDict = GetRouteDict(route.Method);
+                routeDict[route.Path] = route;
+            }
+            catch (ArgumentException)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Unsupported HTTP method: {route.Method}");
+                Console.WriteLine($"Route {route.Path} not added.");
+                Console.ResetColor();
+            }
+        }
+
+        private void CreateAndAddRoute(string method, string path, object[] callbacks)
+        {
+            try
+            {
+                Route route = CreateRoute(method, path, callbacks);
+                AddRoute(route);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Error adding {method} route {path}: {ex.Message}");
+                Console.ResetColor();
+            }
+        }
+
+        // Add routes by providing method, path, and callback(s)
+        public void Get(string path, params object[] callbacks)
+        {
+            CreateAndAddRoute("GET", path, callbacks);
+        }
+
+        public void Post(string path, params object[] callbacks)
+        {
+            CreateAndAddRoute("POST", path, callbacks);
+        }
+
+        public void Put(string path, params object[] callbacks)
+        {
+            CreateAndAddRoute("PUT", path, callbacks);
+        }
+
+        public void Delete(string path, params object[] callbacks)
+        {
+            CreateAndAddRoute("DELETE", path, callbacks);
+        }
+
+        public void Patch(string path, params object[] callbacks)
+        {
+            CreateAndAddRoute("PATCH", path, callbacks);
+        }
+
+        public void Update(string path, params object[] callbacks)
+        {
+            CreateAndAddRoute("UPDATE", path, callbacks);
+        }
+
+        /// <summary>
+        /// Remove a route by method and path
+        /// </summary>
+        public void Unregister(string method, string path)
+        {
+            try
+            {
+                RouteDict routeDict = GetRouteDict(method);
+                routeDict.Remove(path);
+            }
+            catch (ArgumentException)
+            {
+                // Unsupported method -> ignore
+            }
+        }
+
+        /// <summary>
+        /// Register a catch-all callback for unmatched routes
+        /// Might be removed -> if removed use a wildcard route at the end instead "*"
+        /// </summary>
+        public void CatchAll(RouteCallback callback)
+        {
+            _catchAll = new Models.Route("*", "*");
+            _catchAll.Use(callback);
+        }
+
+        /// <summary>
+        /// Check if a route exists
+        /// </summary>
+        public bool HasRoute(string method, string path)
+        {
+            try
+            {
+                RouteDict routeDict = GetRouteDict(method);
+                return routeDict.ContainsKey(path);
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Routing
 
         public async Task Route(HttpListenerContext context)
         {
@@ -45,54 +191,28 @@ namespace WebServer.Routing
             var request = new HttpRequest(context.Request);
             var response = new HttpResponse(context.Response);
 
+            await Route(request, response);
+        }
+
+        public async Task Route(HttpRequest request, HttpResponse response)
+        {
             try
             {
-                var applicableGlobalMiddleware = _globalMiddleware
-                    .Where(m => m.ShouldRun(request.Path))
-                    .Select(m => m.Callback)
-                    .ToList();
-
-                RouteDict? routeDict = GetRouteDictForMethod(request.Method);
-
-                if (routeDict == null)
-                {
-                    response.SetStatusCode(405).Send("Method Not Allowed");
-                    return;
-                }
-
                 // Match route
-                var routeMatch = FindRoute(routeDict, request);
-                RouteCallback? routeCallback = routeMatch.Callback;
-                string? matchedRoutePath = routeMatch.Path;
+                var matchedRoute = FindRoute(request);
 
-                // Get route-specific middleware
-                List<MiddlewareCallback> routeSpecificMiddleware = new List<MiddlewareCallback>();
-                if (matchedRoutePath != null && _routeMiddleware.ContainsKey(matchedRoutePath))
+                if (matchedRoute != null)
                 {
-                    routeSpecificMiddleware = _routeMiddleware[matchedRoutePath];
+                    await ExecuteCallbacks(request, response, matchedRoute);
                 }
-
-                var allMiddleware = applicableGlobalMiddleware
-                    .Concat(routeSpecificMiddleware)
-                    .ToList();
-
-                // Execute middleware chain
-                await ExecuteMiddlewareChain(allMiddleware, 0, request, response, async () =>
+                else if (_catchAll != null)
                 {
-                    // finalHandler to execute route callback / catch-all / response after middleware
-                    if (routeCallback != null)
-                    {
-                        await routeCallback(request, response);
-                    }
-                    else if (_catchAllCallback != null)
-                    {
-                        await _catchAllCallback(request, response);
-                    }
-                    else
-                    {
-                        response.SetStatusCode(404).Send("Not Found");
-                    }
-                });
+                    await ExecuteCallbacks(request, response, _catchAll);
+                }
+                else
+                {
+                    response.SetStatusCode(404).Send("Not Found");
+                }
             }
             catch (Exception ex)
             {
@@ -113,54 +233,43 @@ namespace WebServer.Routing
             }
         }
 
-        private async Task ExecuteMiddlewareChain(
-            List<MiddlewareCallback> middleware,
-            int index,
-            HttpRequest request,
-            HttpResponse response,
-            Func<Task> finalHandler)
-        {
-            if (index >= middleware.Count)
-            {
-                await finalHandler();
-                return;
-            }
-
-            var currentMiddleware = middleware[index];
-
-            await currentMiddleware(request, response, async () =>
-            {
-                // Call the next middleware in the chain
-                await ExecuteMiddlewareChain(middleware, index + 1, request, response, finalHandler);
-            });
-
-            // The middleware chain stops here if next() is not being called
-        }
-
         /// <summary>
         /// Find a matching route in the dictionary
         /// </summary>
-        private (RouteCallback? Callback, string? Path) FindRoute(RouteDict routeDict, HttpRequest request)
+        private Route? FindRoute(HttpRequest request)
         {
-            string path = request.Path;
-
-            // Try exact matching
-            if (routeDict.TryGetValue(path, out var callback))
+            try
             {
-                return (callback, path);
-            }
+                string path = request.Path;
+                RouteDict routeDict = GetRouteDict(request.Method.Method);
 
-            // Try pattern matching for dynamic routes
-            foreach (var route in routeDict)
-            {
-                if (TryMatchPattern(route.Key, path, out var pathParams))
+                #region Route Matching Logic
+
+                // Try with exact match first
+                if (routeDict.TryGetValue(path, out var route))
                 {
-                    request.PathParameters = pathParams;
-                    return (route.Value, route.Key);
+                    return route;
                 }
+
+                // Try with pattern match
+                foreach (var pair in routeDict)
+                {
+                    if (TryMatchPattern(pair.Key, path, out var pathParams))
+                    {
+                        // Add path parameters to request object
+                        request.PathParameters = pathParams;
+                        return route;
+                    }
+                }
+
+                #endregion
+            }
+            catch (ArgumentException)
+            {
+                return null; // Unsupported method
             }
 
-            return (null, null);
+            return null;
         }
 
         /// <summary>
@@ -204,48 +313,98 @@ namespace WebServer.Routing
             return true;
         }
 
-        /// <summary>
-        /// Get the appropriate route dictionary for the HTTP method
-        /// </summary>
-        private RouteDict? GetRouteDictForMethod(HttpMethod method)
+        #endregion
+
+        #region Callback execution
+
+        private async Task ExecuteCallbacks(HttpRequest request, HttpResponse response, Route route)
         {
-            return method.Method.ToUpperInvariant() switch
+            List<RequestHandler> pipeline = new List<RequestHandler>();
+            pipeline.AddRange(_middleware.Select(mw => RequestHandlerUtil.WrapToRequestHandler(mw)));
+            pipeline.AddRange(route.Callbacks);
+
+            await ExecuteCallbackChain(0, pipeline, request, response);
+        }
+
+        private async Task ExecuteCallbackChain(int index, List<RequestHandler> pipeline,
+            HttpRequest request, HttpResponse response)
+        {
+            if (index >= pipeline.Count)
             {
-                "GET" => _routes.GetRoutes,
-                "POST" => _routes.PostRoutes,
-                "PUT" => _routes.PutRoutes,
-                "DELETE" => _routes.DeleteRoutes,
-                "PATCH" => _routes.UpdateRoutes,
-                _ => null
+                return; // End of chain
+            }
+
+            RequestHandler callback = pipeline[index];
+            bool isLast = (index == pipeline.Count - 1);
+
+            if (isLast)
+            {
+                await callback(request, response, null);
+            }
+            else
+            {
+                await callback(request, response, async () =>
+                {
+                    await ExecuteCallbackChain(index + 1, pipeline, request, response);
+                });
+            }
+        }
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Get the route list for a specific HTTP method
+        /// </summary>
+        /// <exception cref="ArgumentException"></exception>
+        private RouteDict GetRouteDict(string method)
+        {
+            return method.ToUpperInvariant() switch
+            {
+                "GET" => _getRoutes,
+                "POST" => _postRoutes,
+                "PUT" => _putRoutes,
+                "DELETE" => _deleteRoutes,
+                "PATCH" => _patchRoutes,
+                "UPDATE" => _updateRoutes,
+                _ => throw new ArgumentException($"Unsupported HTTP method: {method}"),
             };
         }
 
-        public void RegisterRoute(string method, string path, RouteCallback callback)
+        /// <summary>
+        /// Create a Route instance from method, path, and callbacks
+        /// </summary>
+        /// <exception cref="ArgumentException"></exception>
+        private static Route CreateRoute(string method, string path, object[] callbacks)
         {
-            var httpMethod = new HttpMethod(method);
-            var routeDict = GetRouteDictForMethod(httpMethod);
+            Route route = new Route(method, path);
 
-            if (routeDict == null)
+            foreach (var callback in callbacks)
             {
-                throw new ArgumentException($"Unsupported HTTP method: {method}");
+                // do not need to use conversions here since Route.Use method provides overloads
+                // these overloads already do the conversions
+                if (callback is RouteCallback routeCallback)
+                {
+                    route.Use(routeCallback);
+                }
+                else if (callback is MiddlewareCallback middlewareCallback)
+                {
+                    route.Use(middlewareCallback);
+                }
+                else if (callback is RequestHandler requestHandler)
+                {
+                    route.Use(requestHandler);
+                }
+                else
+                {
+                    throw new ArgumentException($"Invalid callback type: {callback.GetType().Name}");
+                }
             }
 
-            routeDict[path] = callback;
+            return route;
         }
 
-        public void UnregisterRoute(string method, string path)
-        {
-            var httpMethod = new HttpMethod(method);
-            var routeDict = GetRouteDictForMethod(httpMethod);
-            routeDict?.Remove(path);
-        }
-
-        /// <summary>
-        /// Register a catch-all callback for unmatched routes
-        /// </summary>
-        public void CatchAll(RouteCallback callback)
-        {
-            _catchAllCallback = callback;
-        }
+        #endregion
     }
 }
