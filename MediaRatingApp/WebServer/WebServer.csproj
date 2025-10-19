@@ -8,11 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Routing\Interfaces\**" />
+    <EmbeddedResource Remove="Routing\Interfaces\**" />
+    <None Remove="Routing\Interfaces\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ErrorHandler\ErrorHandler.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Routing\Interfaces\" />
+    <Folder Include="Middleware\Common\" />
   </ItemGroup>
 
 </Project>
