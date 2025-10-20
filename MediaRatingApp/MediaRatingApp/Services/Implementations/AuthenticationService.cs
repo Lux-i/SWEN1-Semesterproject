@@ -7,16 +7,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace MediaRatingApp.Services.Implementations
 {
-    class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : IAuthenticationService
     {
         private const int SaltSize = 16; // 16 Byte => 128 bit
         private const int HashSize = 32; // 32 Byte => 256 bit
         private const int Iterations = 100000; // Number of PBKDF2 iterations
 
         private readonly IUserRepository _userRepository;
+        private static ConcurrentDictionary<string, int> _tokens = new();
 
         public AuthenticationService(IUserRepository userRepository)
         {
@@ -59,7 +61,7 @@ namespace MediaRatingApp.Services.Implementations
             }
         }
 
-        public async Task<User?> LoginAsync(string username, string password)
+        public async Task<string?> LoginAsync(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
@@ -73,7 +75,14 @@ namespace MediaRatingApp.Services.Implementations
                 return null;
             }
 
-            return user;
+            string token = Guid.NewGuid().ToString();
+            _tokens[token] = user._Id;
+            return token;
+        }
+
+        public int? ValidateToken(string token)
+        {
+            return _tokens.TryGetValue(token, out int userId) ? userId : null;
         }
 
         private string HashPassword(string password)

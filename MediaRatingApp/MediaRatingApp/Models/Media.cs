@@ -8,26 +8,34 @@ using MediaRatingApp.Models.Enums;
 
 namespace MediaRatingApp.Models
 {
-    abstract class Media
+    public abstract class Media
     {
-        int _id;
-        string Title;
-        string Description;
-        MediaType Type;
-        int ReleaseYear;
-        List<string> Genres;
-        int AgeRating;
-        int CreatedById;
-        DateTime CreatedAt;
-        DateTime? UpdatedAt;
+        public int _Id;
+        public string Title;
+        public string Description;
+        public MediaType Type;
+        public int ReleaseYear;
+        public List<string> Genres;
+        public int AgeRating;
+        public int CreatedById;
+        public DateTime CreatedAt;
+        public DateTime? UpdatedAt;
 
-        User Creator => GetCreator();
-        List<Rating> Ratings => GetMediaRatings();
-        double AverageRating => Ratings.Count > 0 ? Ratings.Average(r => r.Score) : 0.0;
+        public User Creator => GetCreator();
+        public List<Rating> Ratings => GetMediaRatings();
+        public double AverageRating => Ratings.Count > 0 ? Ratings.Average(r => r.Score) : 0.0;
+
+        public Media()
+        {
+            Genres = new List<string>();
+            CreatedAt = DateTime.UtcNow;
+            Title = "";
+            Description = "";
+        }
 
         private User GetCreator()
         {
-            return new User();
+            return new User("test", "test", "test");
         }
 
         private List<Rating> GetMediaRatings()

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MediaRatingApp.Models
 {
-    class Series
+    public class Series
     {
         int Seasons;
         int Episodes; // Number of episodes across all seasons

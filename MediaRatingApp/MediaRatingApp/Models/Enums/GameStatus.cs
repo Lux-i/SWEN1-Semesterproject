@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace MediaRatingApp.Models.Enums
 {
-    public enum GameStatus { EarlyAccess, Beta, Released, Cancelled }
+    public enum GameStatus { Development, EarlyAccess, Beta, Released, Cancelled }
 }

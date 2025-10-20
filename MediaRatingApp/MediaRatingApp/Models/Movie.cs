@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MediaRatingApp.Models
 {
-    class Movie : Media
+    public class Movie : Media
     {
         int Duration; // Duration in minutes
         string Director;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MediaRatingApp.Models
 {
-    class Favorite
+    public class Favorite
     {
         int _Id;
         int UserId;

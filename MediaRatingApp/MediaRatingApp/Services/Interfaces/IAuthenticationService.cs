@@ -10,6 +10,6 @@ namespace MediaRatingApp.Services.Interfaces
     interface IAuthenticationService
     {
         Task<User> RegisterAsync(string username, string password, string email);
-        Task<User?> LoginAsync(string username, string password);
+        Task<string?> LoginAsync(string username, string password);
     }
 }

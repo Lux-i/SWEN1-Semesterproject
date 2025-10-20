@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MediaRatingApp.Models
 {
-    class User
+    public class User
     {
-        public int _Id { get; }
+        public int _Id;
         public string Username { get; }
         public string PasswordHash { get; }
         public string Email { get; }
@@ -17,6 +17,14 @@ namespace MediaRatingApp.Models
         public List<Media> CreatedMedia => GetCreatedMedia();
         public List<Rating> Ratings => GetUserRatings();
         public List<Media> Favorites => GetFavorites();
+
+        public User()
+        {
+            CreatedAt = DateTime.Now;
+            Username = "Max";
+            PasswordHash = "hashed_password";
+            Email = "max.mustermann@gmail.com";
+        }
 
         public User(string username, string passwordHash, string email)
         {

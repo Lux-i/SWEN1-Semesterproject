@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MediaRatingApp.Models
 {
-    class RatingLike
+    public class RatingLike
     {
         int _Id;
         int RatingId;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MediaRatingApp.Models
 {
-    class Rating
+    public class Rating
     {
         public int _Id { get; }
         public int MediaId { get; }
@@ -17,14 +17,14 @@ namespace MediaRatingApp.Models
         public DateTime CreatedAt { get; }
         public DateTime? UpdatedAt { get; }
 
-        public Media Media => GetRatedMedia();
+        public Game Media => GetRatedGame();
         public User User => GetRatingUser();
         public List<RatingLike> Likes => GetRatingLikes();
-        public int LikesCount => Likes.Count(l => l.IsLike);
+        public int LikesCount => Likes.Count();
 
-        private Media GetRatedMedia()
+        private Game GetRatedGame()
         {
-            return new Media();
+            return new Game();
         }
 
         private User GetRatingUser()
