@@ -119,7 +119,7 @@ namespace MediaRatingApp.WebServer
             var server = new Server(["http://localhost/", "http://localhost:8080/"], router);
 
             Console.WriteLine("Starting server...");
-            server.Start();
+            _ = server.Start();
         }
     }
 }

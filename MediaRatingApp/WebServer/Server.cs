@@ -8,7 +8,7 @@ using WebServer.Routing;
 
 namespace WebServer
 {
-    class Server
+    public class Server
     {
         private HttpListener _listener;
         private Router _router;
@@ -23,7 +23,7 @@ namespace WebServer
             _router = router;
         }
 
-        public void Start()
+        public async Task Start()
         {
             _listener.Start();
             Console.WriteLine("Server started. Listening on:");
@@ -36,17 +36,32 @@ namespace WebServer
             Console.WriteLine("");
             while (true)
             {
-                HttpListenerContext context = _listener.GetContext();
+                HttpListenerContext context = await _listener.GetContextAsync();
+                _ = HandleRequestAsync(context);
+            }
+        }
+
+        private async Task HandleRequestAsync(HttpListenerContext context)
+        {
+            try
+            {
+                await _router.Route(context);
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error processing request:");
+                Console.WriteLine($"{ex.Message}\n");
+                Console.ResetColor();
+
+                // Try to send a 500 response
                 try
                 {
-                    _router.Route(context);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error processing request: {ex.Message}");
                     context.Response.StatusCode = 500;
                     context.Response.Close();
                 }
+                catch
+                { }
             }
         }
 
