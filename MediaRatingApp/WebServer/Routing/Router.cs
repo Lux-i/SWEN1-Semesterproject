@@ -256,6 +256,7 @@ namespace WebServer.Routing
                 {
                     if (TryMatchPattern(pair.Key, path, out var pathParams))
                     {
+                        route = routeDict[pair.Key];
                         // Add path parameters to request object
                         request.PathParameters = pathParams;
                         return route;
