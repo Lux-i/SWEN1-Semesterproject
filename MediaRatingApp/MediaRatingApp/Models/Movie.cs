@@ -8,8 +8,8 @@ namespace MediaRatingApp.Models
 {
     public class Movie : Media
     {
-        int Duration; // Duration in minutes
-        string Director;
-        List<string> Actors;
+        public int Duration; // Duration in minutes
+        public string Director;
+        public List<string> Actors;
     }
 }

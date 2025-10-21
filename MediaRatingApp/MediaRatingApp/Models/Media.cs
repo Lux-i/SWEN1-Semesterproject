@@ -25,14 +25,6 @@ namespace MediaRatingApp.Models
         public List<Rating> Ratings => GetMediaRatings();
         public double AverageRating => Ratings.Count > 0 ? Ratings.Average(r => r.Score) : 0.0;
 
-        public Media()
-        {
-            Genres = new List<string>();
-            CreatedAt = DateTime.UtcNow;
-            Title = "";
-            Description = "";
-        }
-
         private User GetCreator()
         {
             return new User("test", "test", "test");

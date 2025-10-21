@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace MediaRatingApp.Models
 {
-    public class Game
+    public class Game : Media
     {
-        List<string> Platforms;
-        List<string> Available; // e.g., Steam, Epic Games, etc.
-        string Developer;
-        string Publisher;
-        GameStatus Status;
+        public List<string> Platforms;
+        public List<string> Available; // e.g., Steam, Epic Games, etc.
+        public string Developer;
+        public string Publisher;
+        public GameStatus Status;
 
         public Game()
         {

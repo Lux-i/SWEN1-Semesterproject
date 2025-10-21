@@ -7,11 +7,19 @@ using System.Threading.Tasks;
 
 namespace MediaRatingApp.Models
 {
-    public class Series
+    public class Series : Media
     {
-        int Seasons;
-        int Episodes; // Number of episodes across all seasons
-        Dictionary<int, int> EpisodesPerSeason; // <Season, EpisodesCount>
-        SeriesStatus Status;
+        public int Seasons;
+        public int Episodes; // Number of episodes across all seasons
+        public Dictionary<int, int> EpisodesPerSeason; // <Season, EpisodesCount>
+        public SeriesStatus Status;
+
+        public Series()
+        {
+            Seasons = 0;
+            Episodes = 0;
+            EpisodesPerSeason = new Dictionary<int, int>();
+            Status = SeriesStatus.Ongoing;
+        }
     }
 }
