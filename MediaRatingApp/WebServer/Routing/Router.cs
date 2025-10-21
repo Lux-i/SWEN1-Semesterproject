@@ -20,6 +20,7 @@ namespace WebServer.Routing
         private readonly RouteDict _updateRoutes;
         #endregion
         private readonly List<MiddlewareCallback> _middleware; // Global middleware of this router
+        private readonly List<SubRouterRegistration> _subRouters; // Registered sub-routers
         private Route? _catchAll; // Might be removed - See CatchAll()
 
         public Router()
@@ -34,6 +35,7 @@ namespace WebServer.Routing
             #endregion
 
             _middleware = new List<MiddlewareCallback>();
+            _subRouters = new List<SubRouterRegistration>();
         }
 
         /// <summary>
@@ -46,30 +48,17 @@ namespace WebServer.Routing
 
         public void Use(string pathPrefix, Router subRouter)
         {
-            Use(async (req, res, next) =>
+            // Normalize path prefix on 'invalid' paths
+            if (!pathPrefix.StartsWith("/"))
             {
-                if (req.Path.StartsWith(pathPrefix))
-                {
-                    string originalPath = req.Path;
-                    req.Path = req.Path.Substring(pathPrefix.Length);
-                    if (string.IsNullOrEmpty(req.Path))
-                    {
-                        req.Path = "/";
-                    }
+                pathPrefix = "/" + pathPrefix;
+            }
+            if (pathPrefix.EndsWith("/") && pathPrefix.Length > 1)
+            {
+                pathPrefix = pathPrefix.TrimEnd('/');
+            }
 
-                    await subRouter.Route(req, res);
-
-                    req.Path = originalPath; // Restore original path
-                }
-                else
-                {
-                    // Continue - Not for this sub-router
-                    if (next != null)
-                    {
-                        await next();
-                    }
-                }
-            });
+            _subRouters.Add(new SubRouterRegistration { PathPrefix = pathPrefix, Router = subRouter });
         }
 
         #region Route Management
@@ -198,21 +187,48 @@ namespace WebServer.Routing
         {
             try
             {
-                // Match route
-                var matchedRoute = FindRoute(request);
+                List<RequestHandler> pipeline = new List<RequestHandler>();
+                pipeline.AddRange(_middleware.Select(mw => RequestHandlerUtil.WrapToRequestHandler(mw)));
 
-                if (matchedRoute != null)
+                pipeline.Add(async (req, res, next) =>
                 {
-                    await ExecuteCallbacks(request, response, matchedRoute);
-                }
-                else if (_catchAll != null)
-                {
-                    await ExecuteCallbacks(request, response, _catchAll);
-                }
-                else
-                {
-                    response.SetStatusCode(404).Send("Not Found");
-                }
+                    #region Sub-router matching
+                    SubRouterRegistration? matchedSubRouter = FindSubRouter(req);
+                    if (matchedSubRouter != null)
+                    {
+                        string originalPath = req.Path; // Store original path in case it is needed later in this scope
+                        req.Path = req.Path.Substring(matchedSubRouter.PathPrefix.Length);
+                        // In case of direct matches
+                        if (string.IsNullOrEmpty(req.Path))
+                        {
+                            req.Path = "/";
+                        }
+
+                        await matchedSubRouter.Router.Route(req, res);
+
+                        req.Path = originalPath;
+                        return;
+                    }
+                    #endregion
+
+                    #region Route Matching
+                    var matchedRoute = FindRoute(request);
+                    if (matchedRoute != null)
+                    {
+                        await ExecuteRouteCallbacks(request, response, matchedRoute);
+                    }
+                    else if (_catchAll != null)
+                    {
+                        await ExecuteRouteCallbacks(request, response, _catchAll);
+                    }
+                    else
+                    {
+                        response.SetStatusCode(404).Send("Not Found");
+                    }
+                    #endregion
+                });
+
+                await ExecuteCallbackChain(0, pipeline, request, response);
             }
             catch (Exception ex)
             {
@@ -231,6 +247,21 @@ namespace WebServer.Routing
                     // Response already sent -> ignore
                 }
             }
+        }
+
+        private SubRouterRegistration? FindSubRouter(HttpRequest request)
+        {
+            string path = request.Path;
+
+            foreach (var subRouterReg in _subRouters)
+            {
+                if (path.StartsWith(subRouterReg.PathPrefix))
+                {
+                    return subRouterReg;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -256,6 +287,7 @@ namespace WebServer.Routing
                 {
                     if (TryMatchPattern(pair.Key, path, out var pathParams))
                     {
+                        route = routeDict[pair.Key];
                         // Add path parameters to request object
                         request.PathParameters = pathParams;
                         return route;
@@ -317,6 +349,10 @@ namespace WebServer.Routing
 
         #region Callback execution
 
+        // Currently unused
+        /// <summary>
+        /// Execute global- and route-callbacks
+        /// </summary>
         private async Task ExecuteCallbacks(HttpRequest request, HttpResponse response, Route route)
         {
             List<RequestHandler> pipeline = new List<RequestHandler>();
@@ -326,6 +362,17 @@ namespace WebServer.Routing
             await ExecuteCallbackChain(0, pipeline, request, response);
         }
 
+        /// <summary>
+        /// Execute the callbacks of given route
+        /// </summary>
+        private async Task ExecuteRouteCallbacks(HttpRequest request, HttpResponse response, Route route)
+        {
+            await ExecuteCallbackChain(0, route.Callbacks, request, response);
+        }
+
+        /// <summary>
+        /// Execute a chain of callbacks
+        /// </summary>
         private async Task ExecuteCallbackChain(int index, List<RequestHandler> pipeline,
             HttpRequest request, HttpResponse response)
         {
@@ -406,5 +453,11 @@ namespace WebServer.Routing
         }
 
         #endregion
+
+        private class SubRouterRegistration
+        {
+            public string PathPrefix { get; set; } = string.Empty;
+            public Router Router { get; set; } = null!;
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace MediaRatingApp.WebServer
     // Just a simple example/test server listening on http://localhost/ and http://localhost:8080/
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Router router = new Router();
 
@@ -119,7 +119,7 @@ namespace MediaRatingApp.WebServer
             var server = new Server(["http://localhost/", "http://localhost:8080/"], router);
 
             Console.WriteLine("Starting server...");
-            server.Start();
+            await server.Start();
         }
     }
 }
