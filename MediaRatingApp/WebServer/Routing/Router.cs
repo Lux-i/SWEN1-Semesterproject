@@ -12,12 +12,12 @@ namespace WebServer.Routing
     public class Router
     {
         #region Route Dictionaries
-        private readonly RouteDict _getRoutes;
-        private readonly RouteDict _postRoutes;
-        private readonly RouteDict _putRoutes;
-        private readonly RouteDict _deleteRoutes;
-        private readonly RouteDict _patchRoutes;
-        private readonly RouteDict _updateRoutes;
+        private readonly RouteDictGroup _getRoutes;
+        private readonly RouteDictGroup _postRoutes;
+        private readonly RouteDictGroup _putRoutes;
+        private readonly RouteDictGroup _deleteRoutes;
+        private readonly RouteDictGroup _patchRoutes;
+        private readonly RouteDictGroup _updateRoutes;
         #endregion
         private readonly List<MiddlewareCallback> _middleware; // Global middleware of this router
         private readonly List<SubRouterRegistration> _subRouters; // Registered sub-routers
@@ -26,12 +26,12 @@ namespace WebServer.Routing
         public Router()
         {
             #region Initialize Route Dictionaries
-            _getRoutes = new RouteDict();
-            _postRoutes = new RouteDict();
-            _putRoutes = new RouteDict();
-            _deleteRoutes = new RouteDict();
-            _patchRoutes = new RouteDict();
-            _updateRoutes = new RouteDict();
+            _getRoutes = new RouteDictGroup();
+            _postRoutes = new RouteDictGroup();
+            _putRoutes = new RouteDictGroup();
+            _deleteRoutes = new RouteDictGroup();
+            _patchRoutes = new RouteDictGroup();
+            _updateRoutes = new RouteDictGroup();
             #endregion
 
             _middleware = new List<MiddlewareCallback>();
@@ -70,8 +70,9 @@ namespace WebServer.Routing
         {
             try
             {
-                RouteDict routeDict = GetRouteDict(route.Method);
-                routeDict[route.Path] = route;
+                RouteDictGroup routeDictGrp = GetRouteDict(route.Method);
+                routeDictGrp.StaticRoutes[route.Path] = route;
+                routeDictGrp.DynamicRoutes[route.Path] = route;
             }
             catch (ArgumentException)
             {
@@ -129,22 +130,6 @@ namespace WebServer.Routing
         }
 
         /// <summary>
-        /// Remove a route by method and path
-        /// </summary>
-        public void Unregister(string method, string path)
-        {
-            try
-            {
-                RouteDict routeDict = GetRouteDict(method);
-                routeDict.Remove(path);
-            }
-            catch (ArgumentException)
-            {
-                // Unsupported method -> ignore
-            }
-        }
-
-        /// <summary>
         /// Register a catch-all callback for unmatched routes
         /// Might be removed -> if removed use a wildcard route at the end instead "*"
         /// </summary>
@@ -155,14 +140,34 @@ namespace WebServer.Routing
         }
 
         /// <summary>
+        /// Remove a route by method and path
+        /// </summary>
+        public void Unregister(string method, string path)
+        {
+            try
+            {
+                RouteDictGroup routeDictGrp = GetRouteDict(method);
+                if (HasRoute(method, path))
+                {
+                    routeDictGrp.StaticRoutes.Remove(path);
+                    routeDictGrp.DynamicRoutes.Remove(path);
+                }
+            }
+            catch (ArgumentException)
+            {
+                // Unsupported method -> ignore
+            }
+        }
+
+        /// <summary>
         /// Check if a route exists
         /// </summary>
         public bool HasRoute(string method, string path)
         {
             try
             {
-                RouteDict routeDict = GetRouteDict(method);
-                return routeDict.ContainsKey(path);
+                RouteDictGroup routeDictGrp = GetRouteDict(method);
+                return routeDictGrp.AllRoutes.ContainsKey(path);
             }
             catch (ArgumentException)
             {
@@ -272,22 +277,22 @@ namespace WebServer.Routing
             try
             {
                 string path = request.Path;
-                RouteDict routeDict = GetRouteDict(request.Method.Method);
+                RouteDictGroup routeDictGrp = GetRouteDict(request.Method.Method);
 
                 #region Route Matching Logic
 
                 // Try with exact match first
-                if (routeDict.TryGetValue(path, out var route))
+                if (routeDictGrp.StaticRoutes.TryGetValue(path, out var route))
                 {
                     return route;
                 }
 
                 // Try with pattern match
-                foreach (var pair in routeDict)
+                foreach (var pair in routeDictGrp.DynamicRoutes)
                 {
                     if (TryMatchPattern(pair.Key, path, out var pathParams))
                     {
-                        route = routeDict[pair.Key];
+                        route = routeDictGrp.DynamicRoutes[pair.Key];
                         // Add path parameters to request object
                         request.PathParameters = pathParams;
                         return route;
@@ -405,7 +410,7 @@ namespace WebServer.Routing
         /// Get the route list for a specific HTTP method
         /// </summary>
         /// <exception cref="ArgumentException"></exception>
-        private RouteDict GetRouteDict(string method)
+        private RouteDictGroup GetRouteDict(string method)
         {
             return method.ToUpperInvariant() switch
             {
