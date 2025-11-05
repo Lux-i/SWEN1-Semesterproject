@@ -242,7 +242,27 @@ namespace MediaRatingApp
             router.Use("/api", apiRouter);
 
             Server server = new Server(["http://localhost/"], router);
-            await server.Start();
+            server.Start();
+
+            while (true) {
+                Console.Write("> ");
+                string? input = Console.ReadLine();
+                if(input != null)
+                {
+                    switch (input)
+                    {
+                        case "stop":
+                            server.Stop();
+                            break;
+                        case "start":
+                            await server.Start();
+                            break;
+                        default:
+                            Console.WriteLine("Unknown command");
+                            break;
+                    }
+                }
+            }
         }
     }
 }
