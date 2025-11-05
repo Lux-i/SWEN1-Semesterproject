@@ -70,9 +70,8 @@ namespace WebServer.Routing
         {
             try
             {
-                RouteDictGroup routeDictGrp = GetRouteDict(route.Method);
-                routeDictGrp.StaticRoutes[route.Path] = route;
-                routeDictGrp.DynamicRoutes[route.Path] = route;
+                RouteDict routeDict = GetRouteDict(route.Method, route.Path);
+                routeDict[route.Path] = route;
             }
             catch (ArgumentException)
             {
@@ -146,11 +145,10 @@ namespace WebServer.Routing
         {
             try
             {
-                RouteDictGroup routeDictGrp = GetRouteDict(method);
+                RouteDict routeDict = GetRouteDict(method, path);
                 if (HasRoute(method, path))
                 {
-                    routeDictGrp.StaticRoutes.Remove(path);
-                    routeDictGrp.DynamicRoutes.Remove(path);
+                    routeDict.Remove(path);
                 }
             }
             catch (ArgumentException)
@@ -166,7 +164,7 @@ namespace WebServer.Routing
         {
             try
             {
-                RouteDictGroup routeDictGrp = GetRouteDict(method);
+                RouteDictGroup routeDictGrp = GetRouteDictGroup(method);
                 return routeDictGrp.AllRoutes.ContainsKey(path);
             }
             catch (ArgumentException)
@@ -277,7 +275,7 @@ namespace WebServer.Routing
             try
             {
                 string path = request.Path;
-                RouteDictGroup routeDictGrp = GetRouteDict(request.Method.Method);
+                RouteDictGroup routeDictGrp = GetRouteDictGroup(request.Method.Method);
 
                 #region Route Matching Logic
 
@@ -407,10 +405,34 @@ namespace WebServer.Routing
         #region Helpers
 
         /// <summary>
-        /// Get the route list for a specific HTTP method
+        /// Get the route dictionary for a specific HTTP method and type
         /// </summary>
         /// <exception cref="ArgumentException"></exception>
-        private RouteDictGroup GetRouteDict(string method)
+        private RouteDict GetRouteDict(string method, string path)
+        {
+            return (method.ToUpperInvariant(), DetermineRoutePathType(path)) switch
+            {
+                ("GET", RoutePathType.Static) => _getRoutes.StaticRoutes,
+                ("GET", RoutePathType.Dynamic) => _getRoutes.DynamicRoutes,
+                ("POST", RoutePathType.Static) => _postRoutes.StaticRoutes,
+                ("POST", RoutePathType.Dynamic) => _postRoutes.DynamicRoutes,
+                ("PUT", RoutePathType.Static) => _putRoutes.StaticRoutes,
+                ("PUT", RoutePathType.Dynamic) => _putRoutes.DynamicRoutes,
+                ("DELETE", RoutePathType.Static) => _deleteRoutes.StaticRoutes,
+                ("DELETE", RoutePathType.Dynamic) => _deleteRoutes.DynamicRoutes,
+                ("PATCH", RoutePathType.Static) => _patchRoutes.StaticRoutes,
+                ("PATCH", RoutePathType.Dynamic) => _patchRoutes.DynamicRoutes,
+                ("UPDATE", RoutePathType.Static) => _updateRoutes.StaticRoutes,
+                ("UPDATE", RoutePathType.Dynamic) => _updateRoutes.DynamicRoutes,
+                _ => throw new ArgumentException($"Unsupported HTTP method: {method}"),
+            };
+        }
+
+        /// <summary>
+        /// Get the route dictionary group for a specific HTTP method
+        /// </summary>
+        /// <exception cref="ArgumentException"></exception>
+        private RouteDictGroup GetRouteDictGroup(string method)
         {
             return method.ToUpperInvariant() switch
             {
@@ -457,12 +479,24 @@ namespace WebServer.Routing
             return route;
         }
 
+        //simple check for now
+        private static RoutePathType DetermineRoutePathType(string path)
+        {
+            return path.Contains(":") ? RoutePathType.Dynamic : RoutePathType.Static;
+        }
+
         #endregion
 
         private class SubRouterRegistration
         {
             public string PathPrefix { get; set; } = string.Empty;
             public Router Router { get; set; } = null!;
+        }
+
+        private enum RoutePathType
+        {
+            Static,
+            Dynamic
         }
     }
 }
