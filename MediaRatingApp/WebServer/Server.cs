@@ -23,6 +23,11 @@ namespace WebServer
             _router = router;
         }
 
+        ~Server()
+        {
+            _listener.Close();
+        }
+
         public async Task Start()
         {
             _listener.Start();
@@ -68,7 +73,6 @@ namespace WebServer
         public void Stop()
         {
             _listener.Stop();
-            _listener.Close();
             Console.WriteLine("Server stopped.");
         }
     }
