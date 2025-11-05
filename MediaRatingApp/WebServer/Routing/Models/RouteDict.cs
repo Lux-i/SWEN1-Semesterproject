@@ -9,6 +9,12 @@ namespace WebServer.Routing.Models
 {
     class RouteDict : Dictionary<string, Route>
     {
+        public RouteDict() : base()
+        {
+        }
 
+        public RouteDict(IEnumerable<KeyValuePair<string, Route>> collection) : base(collection)
+        {
+        }
     }
 }
