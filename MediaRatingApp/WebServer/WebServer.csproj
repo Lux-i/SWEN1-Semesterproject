@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ErrorHandler\ErrorHandler.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Middleware\Common\" />
   </ItemGroup>
 
