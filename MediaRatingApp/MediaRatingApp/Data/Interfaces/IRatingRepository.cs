@@ -16,7 +16,7 @@ namespace MediaRatingApp.Data.Interfaces
 
         Task<bool> UpdateAsync(Rating rating);
 
-        Task<bool> UpdateConfirmedAsync(int ratingId, bool confirmStatus);
+        Task<bool> UpdateConfirmedAsync(int ratingId, bool confirmStatus, int userId);
 
         Task<bool> DeleteAsync(int id);
 

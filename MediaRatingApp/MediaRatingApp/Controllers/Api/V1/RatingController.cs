@@ -226,8 +226,9 @@ namespace MediaRatingApp.Controllers.Api.V1
                         {
                             res.SetStatusCode(404).SendJson(new { error = ex.Message });
                         }
-                        catch
+                        catch (Exception ex)
                         {
+                            Console.WriteLine($"Unknown Error: {ex.Message}");
                             res.SetStatusCode(500)
                                 .SendJson(new { error = $"Internal server error." });
                         }

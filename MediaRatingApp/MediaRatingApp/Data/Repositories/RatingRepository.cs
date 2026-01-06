@@ -132,12 +132,14 @@ namespace MediaRatingApp.Data.Repositories
             return await cmd.ExecuteNonQueryAsync() == 1;
         }
 
-        public async Task<bool> UpdateConfirmedAsync(int ratingId, bool confirmStatus)
+        public async Task<bool> UpdateConfirmedAsync(int ratingId, bool confirmStatus, int userId)
         {
             const string sql = """
-                UPDATE media_rating_app.ratings
+                UPDATE media_rating_app.ratings r
                 SET is_confirmed = @is_confirmed
-                WHERE id = @id;
+                FROM media_entries m
+                WHERE r.id = @id AND r.media_id = m.id
+                AND m.creator_id = @user_id;
                 """;
 
             await using var conn = await OpenConnectionAsync();
@@ -145,6 +147,7 @@ namespace MediaRatingApp.Data.Repositories
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("id", ratingId);
             cmd.Parameters.AddWithValue("is_confirmed", confirmStatus);
+            cmd.Parameters.AddWithValue("user_id", userId);
 
             return await cmd.ExecuteNonQueryAsync() == 1;
         }

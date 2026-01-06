@@ -90,11 +90,7 @@ namespace MediaRatingApp.Services.Implementations
             if (rating == null)
                 throw new KeyNotFoundException("Rating not found.");
 
-            // Adjust this rule if admins/moderators should confirm instead
-            if (rating.UserId != userId)
-                throw new UnauthorizedAccessException("User cannot confirm this rating.");
-
-            var updated = await _ratingRepo.UpdateConfirmedAsync(ratingId, true);
+            var updated = await _ratingRepo.UpdateConfirmedAsync(ratingId, true, userId);
             if (!updated)
                 throw new InvalidOperationException("Failed to confirm rating.");
         }
