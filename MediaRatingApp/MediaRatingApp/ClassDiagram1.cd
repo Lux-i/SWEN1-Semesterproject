@@ -1,0 +1,414 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MediaRatingApp.Program" Collapsed="true">
+    <Position X="14.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Controllers.Api.V1.MediaController" Collapsed="true">
+    <Position X="3.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Api\V1\MediaController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Controllers.Api.V1.UserController" Collapsed="true">
+    <Position X="7.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Api\V1\UserController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Controllers.Api.V1.V1Controller" Collapsed="true">
+    <Position X="10" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAQAAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Api\V1\V1Controller.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MediaRatingApp.Controllers.Api.ApiController" Collapsed="true">
+    <Position X="12.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAACAAIAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Api\ApiController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Controllers.Models.Controller">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ARAAAAAAAAAAAAACAEAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Models\Controller.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MediaRatingApp.Controllers.AuthController" Collapsed="true">
+    <Position X="1" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\AuthController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Controllers.BaseController" Collapsed="true">
+    <Position X="5.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAACAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\BaseController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Data.Mappers.MediaMapper" Collapsed="true">
+    <Position X="16.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Mappers\MediaMapper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Data.Mappers.RatingMapper" Collapsed="true">
+    <Position X="20" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Mappers\RatingMapper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Data.Mappers.UserMapper" Collapsed="true">
+    <Position X="18.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Mappers\UserMapper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Data.Repositories.FavoriteRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAACBCAAMAAAAKAAAAAAACACAAgAAAgJAA=</HashCode>
+      <FileName>Data\Repositories\FavoriteRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MediaRatingApp.Data.Repositories.MediaRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAEAEAAAAAAEAAAQAAAAAAAAgACAAAAYQAIIA=</HashCode>
+      <FileName>Data\Repositories\MediaRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MediaRatingApp.Data.Repositories.FakeMediaRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAEAAAAAAAAAAQAAAIAAAAgAAAAAAYwAIIA=</HashCode>
+      <FileName>Data\Repositories\MediaRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MediaRatingApp.Data.Repositories.RatingRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAABAAAEAAEASEABAAAAAAIgACAAAAIAAIIA=</HashCode>
+      <FileName>Data\Repositories\RatingRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MediaRatingApp.Data.Repositories.UserRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAIAAAAAAAAAAAEAAEAAQAAABAAgACAAAEIAAIIg=</HashCode>
+      <FileName>Data\Repositories\UserRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MediaRatingApp.Data.Repositories.FakeUserRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAIAAAACAAAAAAAAAEAAQAIABAIgAAAAAEIAAIIg=</HashCode>
+      <FileName>Data\Repositories\UserRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MediaRatingApp.Middleware.AuthMiddleware" Collapsed="true">
+    <Position X="16.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Middleware\AuthMiddleware.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Middleware.OwnershipMiddleware" Collapsed="true">
+    <Position X="23.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Middleware\OwnershipMiddleware.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.Mappers.UserModelMapper" Collapsed="true">
+    <Position X="20" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Models\Mappers\UserModelMapper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.Episode" Collapsed="true">
+    <Position X="18.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACIAAAAQAIAEAAAAAAAAAAgAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Models\Episode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.Favorite" Collapsed="true">
+    <Position X="23.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAACAAAAgAAAAAAEAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Models\Favorite.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.Media" Collapsed="true">
+    <Position X="18.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAAAAICEgCAiAAAAAAAAAAAAAGEAAAAQAIIAA=</HashCode>
+      <FileName>Models\Media.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.MediaCreateDto" Collapsed="true">
+    <Position X="20" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAEgAAAAAAAAAAAAAAAAGAAAAAAAIAAg=</HashCode>
+      <FileName>Models\Media.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.MediaGroup" Collapsed="true">
+    <Position X="21.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAgAAIAAU=</HashCode>
+      <FileName>Models\MediaGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.MediaGroupHierarchy" Collapsed="true">
+    <Position X="23.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQIAAAAAAQAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Models\MediaGroupHierarchy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.MediaGroupLink" Collapsed="true">
+    <Position X="14.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAEAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Models\MediaGroupLink.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.MovieDetails" Collapsed="true">
+    <Position X="21.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgAAAAEAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Models\MovieDetails.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.Rating" Collapsed="true">
+    <Position X="16.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEADAAAAAAAACAAAACAAAAwAAAAAAEAAAACgAAAAAAQ=</HashCode>
+      <FileName>Models\Rating.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.RatingLike" Collapsed="true">
+    <Position X="18.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAIAAAAAAAAAAgAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\RatingLike.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.Season" Collapsed="true">
+    <Position X="14.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAACAAAAACAIAAAAAAAAAAAAABAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Models\Season.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.User" Collapsed="true">
+    <Position X="16.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAASAAAAAAAAAAAAAAgBAAAAAAAAA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.UserOut" Collapsed="true">
+    <Position X="21.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAASAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.UserProfile" Collapsed="true">
+    <Position X="23.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEBEAAAAAAAAAAICAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\UserProfile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.UserProfileSlim" Collapsed="true">
+    <Position X="14.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAIAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\UserProfile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Models.WatchListItem" Collapsed="true">
+    <Position X="20" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAACAAAAgAAAAAAEAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Models\WatchListItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Services.Implementations.AuthenticationService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAgAACEBAAAgAACAAIAAAYAACAgAAABAABAACA=</HashCode>
+      <FileName>Services\Implementations\AuthenticationService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MediaRatingApp.Services.Implementations.FavoriteService" Collapsed="true">
+    <Position X="16.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Implementations\FavoriteService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Services.Implementations.MediaService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAgAAAAAAAAAAAAAAAAAAAAAAAAggAAAAAAIEAIIA=</HashCode>
+      <FileName>Services\Implementations\MediaService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MediaRatingApp.Services.Implementations.RatingService" Collapsed="true">
+    <Position X="23.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Implementations\RatingService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MediaRatingApp.Services.Implementations.UserService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAACAAAAAAEAAAAAAAAQwEIA=</HashCode>
+      <FileName>Services\Implementations\UserService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="MediaRatingApp.Controllers.Interfaces.IApiVersionController" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Interfaces\IApiVersionController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Controllers.Interfaces.IController" Collapsed="true">
+    <Position X="0.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Interfaces\IController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Data.Interfaces.IFavoriteRepository" Collapsed="true">
+    <Position X="16.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACBCAAIAAAAAAAAAAAACAAAAgAAAAJAA=</HashCode>
+      <FileName>Data\Interfaces\IFavoriteRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Data.Interfaces.IMediaGroupRepository" Collapsed="true">
+    <Position X="20" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAIAACAAgAAAAAAAAAAAAgIAAAAAIAAIIA=</HashCode>
+      <FileName>Data\Interfaces\IMediaGroupRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Data.Interfaces.IMediaRepository" Collapsed="true">
+    <Position X="21.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAEAAAAAAAAAAQAAAAAAAAgAAAAAAYQAIIA=</HashCode>
+      <FileName>Data\Interfaces\IMediaRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Data.Interfaces.IMovieDetailsRepository" Collapsed="true">
+    <Position X="14.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Interfaces\IMovieDetailsRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Data.Interfaces.IRatingRepository" Collapsed="true">
+    <Position X="16.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAABAAAEAAAASEAAAAAAAAIgAAAAAAIAAIIA=</HashCode>
+      <FileName>Data\Interfaces\IRatingRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Data.Interfaces.IRecommendationRepository" Collapsed="true">
+    <Position X="20" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Interfaces\IRecommendationRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Data.Interfaces.ISeriesDetailsRepository" Collapsed="true">
+    <Position X="21.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgBBAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Data\Interfaces\ISeriesDetailsRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Data.Interfaces.IUserRepository" Collapsed="true">
+    <Position X="23.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAIAAAAAAAAAAAAAAEAAQAAABAAgAAAAAEIAAIIg=</HashCode>
+      <FileName>Data\Interfaces\IUserRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Services.Interfaces.IAuthenticationService" Collapsed="true">
+    <Position X="14.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAACAAAAAAAAAAAAAAAAAACAgAAAAAAAAACA=</HashCode>
+      <FileName>Services\Interfaces\IAuthenticationService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Services.Interfaces.IFavoriteService" Collapsed="true">
+    <Position X="18.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Services\Interfaces\IFavoriteService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Services.Interfaces.IMediaService" Collapsed="true">
+    <Position X="23.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAgAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAIAAIIA=</HashCode>
+      <FileName>Services\Interfaces\IMediaService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Services.Interfaces.IRatingService" Collapsed="true">
+    <Position X="18.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAIIAAAAAAAAAAAAAAAAAQAAAAgACAAAAAAA=</HashCode>
+      <FileName>Services\Interfaces\IRatingService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MediaRatingApp.Services.Interfaces.IUserService" Collapsed="true">
+    <Position X="14.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAACAAAAAAEAAAAAAAAQwAIA=</HashCode>
+      <FileName>Services\Interfaces\IUserService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="MediaRatingApp.Models.Enums.MediaType" Collapsed="true">
+    <Position X="14.75" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEABAAAAAAAAAAAgAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Models\Enums\MediaType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

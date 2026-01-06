@@ -1,38 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using MediaRatingApp.Models.Enums;
+﻿using MediaRatingApp.Models.Enums;
 
 namespace MediaRatingApp.Models
 {
-    public abstract class Media
+    public class Media
     {
-        public int _Id;
-        public string Title;
-        public string Description;
-        public MediaType Type;
-        public int ReleaseYear;
-        public List<string> Genres;
-        public int AgeRating;
-        public int CreatedById;
-        public DateTime CreatedAt;
-        public DateTime? UpdatedAt;
+        public int Id { get; set; }
 
-        public User Creator => GetCreator();
-        public List<Rating> Ratings => GetMediaRatings();
-        public double AverageRating => Ratings.Count > 0 ? Ratings.Average(r => r.Score) : 0.0;
+        public int CreatorId { get; set; }
+        public User? Creator;
 
-        private User GetCreator()
+        public string Title { get; set; } = string.Empty;
+        public string? MediaDescription { get; set; }
+
+        public MediaType MediaType { get; set; }
+
+        public DateOnly? ReleaseDate { get; set; }
+        public int? AgeRestriction { get; set; }
+
+        public string? ArtworkUrl { get; set; }
+
+        public decimal AvgRating { get; set; }
+        public int RatingCount { get; set; }
+
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
+
+        public List<Rating> Ratings = new();
+        public List<MediaGroup> Groups = new();
+    }
+
+    public class MediaCreateDto
+    {
+        public string Title { get; set; } = string.Empty;
+        public string? MediaDescription { get; set; }
+        public string MediaType { get; set; } = string.Empty;
+        public DateOnly? ReleaseDate { get; set; }
+        public int? AgeRestriction { get; set; }
+        public string? ArtworkUrl { get; set; }
+
+        public Media ToMedia()
         {
-            return new User("test", "test", "test");
-        }
-
-        private List<Rating> GetMediaRatings()
-        {
-            return new List<Rating>();
+            return new Media
+            {
+                Title = this.Title,
+                MediaDescription = this.MediaDescription,
+                MediaType = Enum.Parse<MediaType>(this.MediaType, true),
+                ReleaseDate = this.ReleaseDate,
+                AgeRestriction = this.AgeRestriction,
+                ArtworkUrl = this.ArtworkUrl,
+            };
         }
     }
 }

@@ -1,0 +1,29 @@
+version: "3"
+services:
+    postgres:
+        image: pgvector/pgvector:pg16
+        container_name: postgres
+        environment:
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=1234
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./docker/postgres:/docker-entrypoint-initdb.d
+
+
+    pgadmin:
+        container_name: pgadmin_container
+        image: dpage/pgadmin4
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=lucjan.lubomski@gmail.com
+            - PGADMIN_DEFAULT_PASSWORD=1234
+            - PGADMIN_CONFIG_SERVER_MODE=False
+            - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+        ports:
+            - "5050:80"
+        depends_on:
+            - postgres
+        volumes:
+            - ./docker/pgAdmin/servers.json:/pgadmin4/servers.json

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediaRatingApp.Controllers
+namespace MediaRatingApp.Controllers.Interfaces
 {
-    class RatingController
+    public interface IApiVersionController : IController
     {
     }
 }

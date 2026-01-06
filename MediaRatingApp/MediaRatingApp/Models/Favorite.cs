@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MediaRatingApp.Models
+﻿namespace MediaRatingApp.Models
 {
     public class Favorite
     {
-        int _Id;
-        int UserId;
-        int MediaId;
-        DateTime CreatedAt;
+        public int UserId { get; set; }
+        public int MediaId { get; set; }
+
+        public DateTimeOffset CreatedAt { get; set; }
+
+        public User? User { get; set; }
+        public Media? Media { get; set; }
     }
 }

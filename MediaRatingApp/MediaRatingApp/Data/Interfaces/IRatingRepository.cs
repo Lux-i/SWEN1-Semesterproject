@@ -1,12 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediaRatingApp.Models;
 
 namespace MediaRatingApp.Data.Interfaces
 {
-    interface IRatingRepository
+    public interface IRatingRepository
     {
+        Task<Rating?> GetByIdAsync(int id);
+
+        Task<Rating?> GetByUserAndMediaAsync(int userId, int mediaId);
+
+        Task<List<Rating>> GetByMediaAsync(int mediaId);
+
+        Task<List<Rating>> GetByUserAsync(int userId);
+
+        Task<int> CreateAsync(Rating rating);
+
+        Task<bool> UpdateAsync(Rating rating);
+
+        Task<bool> UpdateConfirmedAsync(int ratingId, bool confirmStatus);
+
+        Task<bool> DeleteAsync(int id);
+
+        Task<bool> LikeAsync(int userId, int ratingId);
+
+        Task<bool> UnlikeAsync(int userId, int ratingId);
+
+        Task<bool> HasUserLikedAsync(int userId, int ratingId);
+
+        Task<int> GetLikeCountAsync(int ratingId);
     }
 }

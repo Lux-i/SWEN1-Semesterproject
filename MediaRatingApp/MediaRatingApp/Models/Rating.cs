@@ -1,40 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MediaRatingApp.Models
+﻿namespace MediaRatingApp.Models
 {
     public class Rating
     {
-        public int _Id { get; }
-        public int MediaId { get; }
-        public int UserId { get; }
-        public int Score { get; }
-        public string? Comment { get; }
-        public bool IsConfirmed { get; }
-        public DateTime CreatedAt { get; }
-        public DateTime? UpdatedAt { get; }
+        public int Id { get; set; }
 
-        public Game Media => GetRatedGame();
-        public User User => GetRatingUser();
-        public List<RatingLike> Likes => GetRatingLikes();
-        public int LikesCount => Likes.Count();
+        public int UserId { get; set; }
+        public int MediaId { get; set; }
 
-        private Game GetRatedGame()
-        {
-            return new Game();
-        }
+        public int Stars { get; set; }
+        public string? Review { get; set; }
+        public bool IsConfirmed { get; set; }
 
-        private User GetRatingUser()
-        {
-            return new User();
-        }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
-        private List<RatingLike> GetRatingLikes()
-        {
-            return new List<RatingLike>();
-        }
+        public User? User;
+        public Media? Media;
+
+        public int LikeCount { get; set; }
     }
 }

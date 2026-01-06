@@ -75,10 +75,13 @@ namespace WebServer.Models
             _innerResponse.Close();
         }
 
-        public void Send(string body, int statusCode = 200, string? contentType = null)
+        public void Send(string body, int? statusCode = null, string? contentType = null)
         {
             EnsureNotSent();
-            _innerResponse.StatusCode = statusCode;
+            if (statusCode != null)
+            {
+                _innerResponse.StatusCode = statusCode.Value;
+            }
             if (contentType != null)
             {
                 _innerResponse.ContentType = contentType;
@@ -88,10 +91,13 @@ namespace WebServer.Models
             _innerResponse.Close();
         }
 
-        public void SendJson(object obj, int statusCode = 200)
+        public void SendJson(object obj, int? statusCode = null)
         {
             EnsureNotSent();
-            _innerResponse.StatusCode = statusCode;
+            if (statusCode != null)
+            {
+                _innerResponse.StatusCode = statusCode.Value;
+            }
             _innerResponse.ContentType = "application/json";
 
             string json = System.Text.Json.JsonSerializer.Serialize(obj);
@@ -100,10 +106,13 @@ namespace WebServer.Models
             _innerResponse.Close();
         }
 
-        public void SendHtml(string html, int statusCode = 200)
+        public void SendHtml(string html, int? statusCode = null)
         {
             EnsureNotSent();
-            _innerResponse.StatusCode = statusCode;
+            if (statusCode != null)
+            {
+                _innerResponse.StatusCode = statusCode.Value;
+            }
             _innerResponse.ContentType = "text/html; charset=utf-8";
             WriteBody(html);
             _isSent = true;
@@ -199,7 +208,7 @@ namespace WebServer.Models
                 ".svg" => "image/svg+xml",
                 ".pdf" => "application/pdf",
                 ".txt" => "text/plain",
-                _ => "application/octet-stream"
+                _ => "application/octet-stream",
             };
         }
         #endregion

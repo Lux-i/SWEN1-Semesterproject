@@ -1,52 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace MediaRatingApp.Models
 {
     public class User
     {
-        public int _Id;
-        public string Username { get; }
-        public string PasswordHash { get; }
-        public string Email { get; }
-        public DateTime CreatedAt { get; }
+        public int Id { get; set; }
+        public string Username { get; set; } = null!;
 
-        public List<Media> CreatedMedia => GetCreatedMedia();
-        public List<Rating> Ratings => GetUserRatings();
-        public List<Media> Favorites => GetFavorites();
+        [JsonIgnore] // Exclude PwHash from JSON serialization
+        public string PwHash { get; set; } = null!;
 
-        public User()
-        {
-            CreatedAt = DateTime.Now;
-            Username = "Max";
-            PasswordHash = "hashed_password";
-            Email = "max.mustermann@gmail.com";
-        }
+        public DateTime CreatedAt { get; set; }
+        public UserProfile? Profile { get; set; }
+    }
 
-        public User(string username, string passwordHash, string email)
-        {
-            Username = username;
-            PasswordHash = passwordHash;
-            Email = email;
-            CreatedAt = DateTime.UtcNow;
-        }
-
-        private List<Media> GetCreatedMedia()
-        {
-            return new List<Media>();
-        }
-
-        private List<Rating> GetUserRatings()
-        {
-            return new List<Rating>();
-        }
-
-        private List<Media> GetFavorites()
-        {
-            return new List<Media>();
-        }
+    // User model without PwHash for outgoing data
+    public class UserOut
+    {
+        public int Id { get; set; }
+        public string Username { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
+        public UserProfile? Profile { get; set; }
     }
 }

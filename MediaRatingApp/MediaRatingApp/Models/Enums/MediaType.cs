@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace MediaRatingApp.Models.Enums
 {
-    public enum MediaType { Movie, Series, Game }
+    public enum MediaType { Movie, Series, Game, Book }
 }

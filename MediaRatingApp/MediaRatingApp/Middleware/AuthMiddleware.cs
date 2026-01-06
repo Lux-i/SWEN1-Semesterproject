@@ -1,16 +1,11 @@
-﻿using MediaRatingApp.Services.Implementations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediaRatingApp.Services.Interfaces;
 using WebServer.Models;
 
 namespace MediaRatingApp.Middleware
 {
     public static class AuthMiddleware
     {
-        public static MiddlewareCallback Create(AuthenticationService authService)
+        public static MiddlewareCallback IsAuth(IAuthenticationService authService)
         {
             return async (req, res, next) =>
             {

@@ -7,13 +7,13 @@ using MediaRatingApp.Models;
 
 namespace MediaRatingApp.Services.Interfaces
 {
-    interface IMediaService
+    public interface IMediaService
     {
-        Task<Media> CreateAsync(Media media, int userId);
-        Task UpdateAsync(int mediaId, Media updatedMedia, int userId);
-        Task DeleteAsync(int mediaId, int userId);
-        Task<Media> GetByIdAsync(int mediaId);
-        Task<List<Media>> SearchAsync(string query, int page, int pageSize);
-        Task<List<Media>> GetRecommendationsAsync(int userId);
+        Task<int> CreateAsync(Media media, int userId);
+        Task<Media?> GetByIdAsync(int id);
+        Task<List<Media>> GetAllAsync();
+        Task<bool> UpdateAsync(int mediaId, Media updatedMedia, int userId);
+        Task<bool> DeleteAsync(int mediaId, int userId);
+        Task<bool> IsOwner(int mediaId, int userId);
     }
 }

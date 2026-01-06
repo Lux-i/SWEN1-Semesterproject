@@ -7,9 +7,14 @@ using MediaRatingApp.Models;
 
 namespace MediaRatingApp.Services.Interfaces
 {
-    interface IAuthenticationService
+    public interface IAuthenticationService
     {
-        Task<User> RegisterAsync(string username, string password, string email);
+        Task<User> RegisterAsync(string username, string password);
         Task<string?> LoginAsync(string username, string password);
+        int? ValidateToken(string token);
+        bool LogoutUser(int userId);
+        Task<bool> UpdateUserPassword(int userId, string password, string newPassword);
+
+        Task<bool> DeleteUserAsync(int userId);
     }
 }

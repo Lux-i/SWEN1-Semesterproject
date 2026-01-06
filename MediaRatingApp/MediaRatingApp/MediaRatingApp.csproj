@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Npgsql" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ErrorHandler\ErrorHandler.csproj" />
     <ProjectReference Include="..\WebServer\WebServer.csproj" />
   </ItemGroup>
